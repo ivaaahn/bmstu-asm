@@ -1,0 +1,97 @@
+SSEG SEGMENT PARA STACK 'STACK'
+    DB 100h DUP(0)
+SSEG ENDS
+
+INPUT_DSEG SEGMENT PARA PUBLIC 'DATA'
+    MSG1 db "Enter num 1: $"
+    DIGIT_1 DB 0
+
+	MSG2 db "Enter num 2: $"
+    DIGIT_2 DB 0
+    
+INPUT_DSEG ENDS
+
+
+OUTPUT_DSEG SEGMENT PARA PUBLIC 'DATA'
+    ORG 1h
+    RESULT DB 0
+OUTPUT_DSEG ENDS
+
+
+CSEG SEGMENT PARA PUBLIC 'CODE'
+	ASSUME SS:SSEG, CS:CSEG, DS:INPUT_DSEG, ES:OUTPUT_DSEG
+
+    CR equ 0Dh
+    LF equ 0Ah
+
+MAIN:   
+    MOV AX, INPUT_DSEG
+	MOV DS, AX
+
+    MOV AX, OUTPUT_DSEG
+	MOV ES, AX
+
+    CALL INPUT
+    CALL CALC
+    CALL OUTPUT
+
+    JMP EXIT
+
+
+OUTPUT:
+    MOV DL, ES:RESULT
+    ADD DL, 30h
+
+    MOV AH, 02h
+    INT 21h
+
+    RET
+
+CALC:
+    MOV AH, DIGIT_1
+    ADD AH, DIGIT_2
+
+    MOV ES:RESULT, AH
+
+    RET
+
+INPUT:
+    MOV AH, 09h
+    MOV DX, OFFSET MSG1
+    INT 21h
+
+    MOV AH, 01h              ;READ SYMBOL
+    INT 21h
+    SUB AL, 30h
+    MOV DIGIT_1, AL
+
+    MOV AH, 02h
+    MOV DL, CR
+    INT 21h    
+    MOV DL, LF
+    INT 21h
+
+
+    MOV AH, 09h
+    MOV DX, OFFSET MSG2
+    INT 21h
+
+    MOV AH, 01h             ;READ SYMBOL
+    INT 21h
+    SUB AL, 30h
+    MOV DIGIT_2, AL
+
+    MOV AH, 02h
+    MOV DL, CR
+    INT 21h
+    MOV DL, LF
+    INT 21h
+
+    RET
+
+EXIT:
+	MOV AH, 4Ch
+	INT 21h
+
+CSEG ENDS
+END MAIN
