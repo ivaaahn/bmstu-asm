@@ -1,4 +1,9 @@
 .186
+
+
+;; TODO: раскидать по модулям 
+
+
 SSEG segment para STACK 'STACK'
     db 100 DUP('?')             ; temporary '?' -> 0
 SSEG ends
@@ -30,21 +35,49 @@ main:
     mov es, ax
 
     call readDimens
-
-    ; mov dl, es:M_ROWS
-    ; call PRINT_INT
-
-   
-
-    ; mov dl, es:M_COLS
-    ; call PRINT_INT
-    ; call CRLF
+    call newLine
 
     call readMatrix
     call newLine
+    
+    call calc
+
     call printMatrix
 
     jmp exit
+
+
+calc proc near
+    mov dx, offset inputMatrixMsg
+    mov si, offset es:matrix
+    
+    mov cl, es:matrRows
+    rowsLoop:
+        push cx
+
+        mov cl, es:matrCols
+        sub cl, 1
+        colsLoop:
+            mov al, [si]
+            add al, [si + 1]
+
+            ; Написать оптимальнее?
+            ;;;;;;;;;;;;;;;;;
+            cmp al, 10
+            jb ok
+            sub al, 10
+            ok:
+            ;;;;;;;;;;;;;;;;;
+
+            mov [si], al 
+            inc si
+            loop colsLoop
+        inc si
+
+        pop cx
+        loop rowsLoop
+    ret
+calc endp
 
 
 readDimens proc near
@@ -60,7 +93,6 @@ readDimens proc near
 
     call readInt
     mov es:matrCols, al
-    call newLine
     call newLine
 
     ret
