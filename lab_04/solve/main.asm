@@ -1,0 +1,111 @@
+SSEG SEGMENT PARA STACK 'STACK'
+    DB 100h DUP(0)
+SSEG ENDS
+
+INPUT_DSEG SEGMENT PARA PUBLIC 'DATA'
+    INPUT_MSG1 db "Enter num 1: $"
+    INPUT_MSG2 db "Enter num 2: $"
+
+    DIGIT_1 DB 0
+    DIGIT_2 DB 0
+INPUT_DSEG ENDS
+
+
+RESULT_DSEG SEGMENT PARA PUBLIC 'DATA'
+    ORG 1h
+    RESULT DB 0
+RESULT_DSEG ENDS
+
+CSEG SEGMENT PARA PUBLIC 'CODE'
+    ASSUME SS:SSEG, CS:CSEG, DS:INPUT_DSEG, ES:RESULT_DSEG
+MAIN:   
+    MOV AX, INPUT_DSEG
+	MOV DS, AX
+
+    MOV AX, RESULT_DSEG
+    MOV ES, AX
+
+    CALL INPUT
+    CALL CALC
+    CALL OUTPUT_RES
+
+    JMP EXIT
+
+CRLF proc near
+    CR equ 0Dh
+    LF equ 0Ah
+
+    MOV AH, 02h
+    
+    MOV DL, CR
+    INT 21h    
+    MOV DL, LF
+    INT 21h
+
+    RET
+CRLF endp
+
+PUTCH proc near
+    MOV AH, 02h
+    INT 21h
+    RET
+PUTCH endp
+
+PRINTSTR proc near
+    MOV AH, 09h
+    INT 21h
+    RET
+PRINTSTR endp
+
+
+GETCH proc near
+    MOV AH, 01h
+    INT 21h
+    RET
+GETCH endp
+
+OUTPUT_RES proc near
+    MOV DL, '>'
+    CALL PUTCH
+    MOV DL, ' '
+    CALL PUTCH
+
+    MOV DL, RESULT
+    CALL PUTCH
+    RET
+OUTPUT_RES endp
+
+CALC proc near
+    SUB DIGIT_1, 30h
+    SUB DIGIT_2, 30h
+
+    MOV AH, DIGIT_1
+    ADD AH, DIGIT_2
+
+    ADD AH, 30h
+    MOV ES:RESULT, AH
+    RET
+CALC endp
+
+INPUT proc near
+    MOV DX, OFFSET INPUT_MSG1
+    CALL PRINTSTR
+    CALL GETCH
+    MOV DIGIT_1, AL
+    CALL CRLF
+
+    MOV DX, OFFSET INPUT_MSG2
+    CALL PRINTSTR
+    CALL GETCH
+    MOV DIGIT_2, AL
+    CALL CRLF
+
+    RET
+INPUT endp
+
+EXIT:
+	MOV AH, 4Ch
+	INT 21h
+
+CSEG ENDS
+END MAIN
