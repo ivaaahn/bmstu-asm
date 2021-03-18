@@ -5,7 +5,7 @@ SYM 	equ		2 			; size of 1 symbol is 2 bytes
 LINE 	equ 	80 * SYM 	; size of 1 symb * 80 symbols
 
 DS2 SEGMENT AT 0b800h
-	CA LABEL word			; WTF
+	CA LABEL word			; 
 	ORG LINE + SYM * 5		; 80*2 - line, 80*2*2 - 2 lines,  80*2*2 + 2*2 - to 3rd sym
 	SYMB LABEL word	
 DS2 ENDS

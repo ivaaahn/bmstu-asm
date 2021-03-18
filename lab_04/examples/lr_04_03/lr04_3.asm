@@ -1,17 +1,18 @@
-SD1 SEGMENT byte public 'DATA'
+SD1 SEGMENT PARA public 'DATA'
 	S1 db 'Y'
 	db 65535 - 2 dup (0)
 SD1 ENDS
 
-SD2 SEGMENT byte public 'DATA'
+SD2 SEGMENT PARA public 'DATA'
 	S2 db 'E'
 	db 65535 - 2 dup (0)
 SD2 ENDS
 
-SD3 SEGMENT byte public 'DATA'
+SD3 SEGMENT PARA public 'DATA'
 	S3 db 'S'
 	db 65535 - 2 dup (0)
 SD3 ENDS
+
 
 CSEG SEGMENT para public 'CODE'
 	assume CS:CSEG, DS:SD1
