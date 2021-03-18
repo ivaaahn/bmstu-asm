@@ -4,9 +4,10 @@ SSEG segment para STACK 'STACK'
 SSEG ends
 
 ISEG segment para public 'DATA'
-    INPUT_ROWS_MSG db "Enter num of rows: $"
-    INPUT_COLS_MSG db "Enter num of cols: $"
-    INPUT_MTRX_MSG db "Enter matrix: $"
+    inputRowsMsg db "Enter num of rows: $"
+    inputColsMsg db "Enter num of cols: $"
+    inputMatrixMsg db "Enter matrix: $"
+    resultMatrixMsg db "Result matrix: $"
 ISEG ends
 
 MTRX_SEG segment para public 'DATA'
@@ -47,28 +48,31 @@ main:
 
 
 readDimens proc near
-    mov dx, offset INPUT_ROWS_MSG
+    mov dx, offset inputRowsMsg
     call printStr
 
     call readInt
     mov es:matrRows, al
     call newLine
 
-    mov dx, offset INPUT_COLS_MSG
+    mov dx, offset inputColsMsg
     call printStr
 
     call readInt
     mov es:matrCols, al
+    call newLine
     call newLine
 
     ret
 readDimens endp
 
 
-
 readMatrix proc near
-    mov si, offset es:matrix
+    mov dx, offset inputMatrixMsg
+    call printStr
+    call newLine
 
+    mov si, offset es:matrix
     mov cl, es:matrRows
     rowsLoop:
         push cx
@@ -89,6 +93,10 @@ readMatrix endp
 
 
 printMatrix proc near
+    mov dx, offset resultMatrixMsg
+    call printStr
+    call newLine
+
     mov si, offset es:matrix
     mov cl, es:matrRows
     rowsLoop:
