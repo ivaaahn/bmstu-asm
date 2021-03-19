@@ -10,6 +10,7 @@ public readDimens
 public readMatrix
 public printMatrix
 
+
 interfSeg segment para public 'DATA'
     inputRowsMsg db "Enter num of rows: $"
     inputColsMsg db "Enter num of cols: $"
