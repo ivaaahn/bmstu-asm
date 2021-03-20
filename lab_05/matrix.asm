@@ -25,7 +25,8 @@ initMatrix proc near
 initMatrix endp
 
 calculate proc near
-    mov si, offset es:matrix
+    mov si, 0
+    mov bx, 0
     
     cmp es:matrCols, 1  
     je done
@@ -37,15 +38,15 @@ calculate proc near
         mov cl, es:matrCols
         dec cl
         colsLoop:
-            mov al, [si]
-            add al, [si + 1]
+            mov al, es:matrix[bx][si]
+            add al, es:matrix[bx][si + 1]
 
             cmp al, 10
             jb less10
             sub al, 10
             less10:
 
-            mov [si], al 
+            mov es:matrix[bx][si], al 
             inc si
             loop colsLoop
         inc si
@@ -84,7 +85,8 @@ readDimens endp
 
 
 readMatrix proc near
-    mov si, offset es:matrix
+    mov si, 0
+    mov bx, 0
     mov cl, es:matrRows
     rowsLoop:
         push cx
@@ -96,7 +98,7 @@ readMatrix proc near
             cmp dl, ERR
             je errorRead
 
-            mov [si], al
+            mov es:matrix[bx][si], al
             inc si
             call putSpace
             loop colsLoop
@@ -104,6 +106,7 @@ readMatrix proc near
         call newLine
         pop cx
         loop rowsLoop
+        inc bx
 
     successRead:
         mov dl, OK
@@ -118,15 +121,16 @@ readMatrix endp
 
 printMatrix proc near
     call newLine
+    mov si, 0
+    mov bx, 0
 
-    mov si, offset es:matrix
     mov cl, es:matrRows
     rowsLoop:
         push cx
 
         mov cl, es:matrCols
         colsLoop:
-            mov dl, [si]
+            mov dl, es:matrix[bx][si]
             call putInt
             inc si
             call putSpace
@@ -135,6 +139,7 @@ printMatrix proc near
         call newLine
         pop cx
         loop rowsLoop
+        inc bx
     ret
 printMatrix endp
 

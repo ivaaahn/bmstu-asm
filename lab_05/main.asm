@@ -42,7 +42,6 @@ main:
     cmp dl, ERR
     je errInput
 
-
     call newLine
     
     call calculate
@@ -55,8 +54,6 @@ main:
 
 errInput:
     call printError
-    mov ah, 4ch
-	int 21h
 
 exit:
 	mov ah, 4ch
