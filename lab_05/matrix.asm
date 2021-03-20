@@ -1,66 +1,49 @@
-extrn putSpace: near
-extrn putCh: near
-extrn getCh: near
-extrn putInt: near
-extrn readInt: near
-extrn printStr: near
-extrn newLine: near
+extrn putSpace: near, newLine: near, putCh: near, putInt: near
+extrn readInt: near, readNat: near, printStr: near, getCh: near
 
-public readDimens
-public readMatrix
-public printMatrix
+MAX_ROWS equ 9
+MAX_COLS equ 9
 
-
-interfSeg segment para public 'DATA'
-    inputRowsMsg db "Enter num of rows: $"
-    inputColsMsg db "Enter num of cols: $"
-    inputMatrixMsg db "Enter matrix: $"
-    resultMatrixMsg db "Result matrix: $"
-interfSeg ends
+OK equ 0
+ERR equ 1
 
 matrixSeg segment para public 'DATA'
     matrRows db 0
     matrCols db 0
 
     matrix label byte
-    db 81 dup('X')              ; temporary 'X' -> 0
+    db MAX_COLS * MAX_ROWS dup(0)
 matrixSeg ends
 
-
 codeSeg segment para public 'CODE'
-assume cs:codeSeg, ds:interfSeg, es:matrixSeg
+assume cs:codeSeg, es:matrixSeg
 
-initSegs proc near
-    mov ax, interfSeg
-    mov ds, ax
+initMatrix proc near
     mov ax, matrixSeg
     mov es, ax
     ret
-initSegs endp
+initMatrix endp
 
 calculate proc near
-    call initSegs
-
-    mov dx, offset inputMatrixMsg
     mov si, offset es:matrix
     
+    cmp es:matrCols, 1  
+    je done
+
     mov cl, es:matrRows
     rowsLoop:
         push cx
 
         mov cl, es:matrCols
-        sub cl, 1
+        dec cl
         colsLoop:
             mov al, [si]
             add al, [si + 1]
 
-            ; Написать оптимальнее?
-            ;;;;;;;;;;;;;;;;;
             cmp al, 10
-            jb ok
+            jb less10
             sub al, 10
-            ok:
-            ;;;;;;;;;;;;;;;;;
+            less10:
 
             mov [si], al 
             inc si
@@ -69,38 +52,38 @@ calculate proc near
 
         pop cx
         loop rowsLoop
-    ret
+
+    done:
+        ret
 calculate endp
 
 
 readDimens proc near
-    call initSegs
+    call readNat
+    cmp dl, ERR
+    je errorRead
 
-    mov dx, offset inputRowsMsg
-    call printStr
-
-    call readInt
     mov es:matrRows, al
-    call newLine
+    call putSpace
 
-    mov dx, offset inputColsMsg
-    call printStr
+    call readNat
+    cmp dl, ERR
+    je errorRead
 
-    call readInt
     mov es:matrCols, al
     call newLine
 
-    ret
+    successRead:
+        mov dl, OK
+        ret
+
+    errorRead:
+        mov dl, ERR
+        ret
 readDimens endp
 
 
 readMatrix proc near
-    call initSegs
-
-    mov dx, offset inputMatrixMsg
-    call printStr
-    call newLine
-
     mov si, offset es:matrix
     mov cl, es:matrRows
     rowsLoop:
@@ -109,6 +92,10 @@ readMatrix proc near
         mov cl, es:matrCols
         colsLoop:
             call readInt
+
+            cmp dl, ERR
+            je errorRead
+
             mov [si], al
             inc si
             call putSpace
@@ -117,15 +104,19 @@ readMatrix proc near
         call newLine
         pop cx
         loop rowsLoop
-    ret
+
+    successRead:
+        mov dl, OK
+        ret
+    
+    errorRead:
+        mov dl, ERR
+        pop cx
+        ret
 readMatrix endp
 
 
 printMatrix proc near
-    call initSegs
-
-    mov dx, offset resultMatrixMsg
-    call printStr
     call newLine
 
     mov si, offset es:matrix
@@ -146,6 +137,7 @@ printMatrix proc near
         loop rowsLoop
     ret
 printMatrix endp
+
 
 codeSeg ends
 end

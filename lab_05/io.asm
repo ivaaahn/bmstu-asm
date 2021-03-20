@@ -1,16 +1,15 @@
-public putSpace
-public putCh
-public getCh
-public putInt
-public readInt
-public printStr
-public newLine
+zeroASCII equ 30h
+spaceASCII equ 32
+CR equ 0Dh
+LF equ 0Ah
 
+OK equ 0
+ERR equ 1
 
 codeSeg segment para public 'CODE'
 
 putSpace proc near
-    mov dl, 32
+    mov dl, spaceASCII
     call putCh
     ret
 putSpace endp
@@ -28,16 +27,59 @@ printStr proc near
 printStr endp
 
 putInt proc near
-    add dl, 30h
+    add dl, zeroASCII
     call putCh
     ret
 putInt endp
 
+
+isInt proc near
+    cmp al, '0'
+    jl false
+
+    cmp al, '9'
+    jg false
+
+    true:
+        mov dl, OK
+        ret
+
+    false:
+        mov dl, ERR
+        ret
+isInt endp
+
+isNat proc near
+    cmp al, '0'
+    je false
+    
+    call isInt
+    cmp dl, ERR
+    je false
+
+    true:
+        mov dl, OK
+        ret
+
+    false:
+        mov dl, ERR
+        ret
+isNat endp
+
+
 readInt proc near
     call getCh
-    sub al, 30h
+    call isInt
+    sub al, zeroASCII
     ret
 readInt endp
+
+readNat proc near
+    call getCh
+    call isNat
+    sub al, zeroASCII
+    ret
+readNat endp
 
 getCh proc near
     mov ah, 01h
@@ -46,14 +88,12 @@ getCh proc near
 getCh endp
 
 newLine proc near
-    CR equ 0Dh
-    LF equ 0Ah
-
     mov ah, 02h
     
-    mov DL, CR
+    mov dl, CR
     int 21h    
-    mov DL, LF
+    
+    mov dl, LF
     int 21h
 
     ret
