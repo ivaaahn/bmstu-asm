@@ -19,7 +19,7 @@ interfSeg ends
 
 
 codeSeg segment para public 'CODE'
-assume ss:stackSeg, ds:interfSeg
+    assume ss:stackSeg, ds:interfSeg
 
 main:
     mov ax, interfSeg
