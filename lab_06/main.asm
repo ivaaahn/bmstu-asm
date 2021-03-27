@@ -13,9 +13,9 @@ MaxCommandIndex equ '3'
 
 dataSeg segment para public 'DATA'
     menu    db LF, LF, 'Choose action:', CR, LF, LF
-            db '0. Input signed hex number', CR, LF
-            db '1. Convert to unsigned binary', CR, LF
-            db '2. Convert to signed decimal', CR, LF, LF
+            db '0. Read a signed hexadecimal number.', CR, LF
+            db '1. Convert to unsigned binary number', CR, LF
+            db '2. Convert to signed decimal number', CR, LF, LF
             db '3. Exit program', CR, LF, LF,'$'
     actions dw readNumber, convertBin, convertDec, exit
 dataSeg ends
