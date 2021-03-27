@@ -7,6 +7,9 @@ stackSeg segment para STACK 'STACK'
     db 100 dup(0)
 stackSeg ends
 
+MinCommandIndex equ '0'
+MaxCommandIndex equ '3'
+
 
 dataSeg segment para public 'DATA'
     menu    db LF, LF, 'Choose action:', CR, LF, LF
@@ -32,17 +35,21 @@ printMenu endp
 readAction proc near
     mov ah, FuncGetchWithoutEcho
     int 21h
-    cmp al, '3'
+    
+    ; Проверка на (0 <= input <= 3)
+    cmp al, MaxCommandIndex
     ja readAction
-    cmp al, '0'
+
+    cmp al, MinCommandIndex
     jb readAction
 
-    sub al, '0'
+    sub al, ZeroASCII
 
+    ; SI = 2AL
     mov cl, 2
     mul cl
-
     mov si, ax
+
     ret
 readAction endp
 
@@ -55,6 +62,7 @@ main:
         call readAction
         call actions[si]
         jmp eventLoop
+
 
 exit proc near
 	mov ah, 4ch
