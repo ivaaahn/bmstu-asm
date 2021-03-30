@@ -48,10 +48,13 @@ calculate proc near
 
             mov es:matrix[bx][si], al 
             inc si
+            ; inc bx
+
             loop colsLoop
         inc si
 
         pop cx
+        add bl, es:matrCols
         loop rowsLoop
 
     done:
@@ -105,8 +108,8 @@ readMatrix proc near
 
         call newLine
         pop cx
+        add bl, es:matrCols
         loop rowsLoop
-        inc bx
 
     successRead:
         mov dl, OK
@@ -138,8 +141,9 @@ printMatrix proc near
 
         call newLine
         pop cx
+        add bl, es:matrCols
         loop rowsLoop
-        inc bx
+        ; inc bx
     ret
 printMatrix endp
 
