@@ -12,10 +12,10 @@ org 100h
 
 main:
     jmp installer
-
-oldHandler dd (0)               ; double word
-currSpeed db minSpeed
-counter db timesPerSecond
+    oldHandler dd (0)               ; double word
+    currSpeed db minSpeed
+    counter db timesPerSecond
+    isLoad db 1
 
 myHandler proc
     pusha
@@ -75,13 +75,20 @@ installer proc
     mov al, timerIntHandler
     int 21h
 
-    mov word ptr cs:oldHandler, bx
-    mov word ptr cs:oldHandler+2, es
+    cmp es:isLoad, 1
+    je uninstaller
+
+    mov word ptr oldHandler, bx
+    mov word ptr oldHandler+2, es
 
     ; Set my handler
     mov ah, 25h                 ; AL = номер прерывания, DS:DX - адрес обработчика
     mov al, timerIntHandler
     mov dx, offset myHandler
+    int 21h
+
+    mov dx, offset loadMsg
+    mov ah, 09h
     int 21h
 
     mov dx, offset installer
@@ -91,15 +98,37 @@ installer proc
 installer endp
 
 uninstaller proc
+    push es
+    push ds
+
     mov ah, 25h
     mov al, timerIntHandler
 
-    mov ds, word ptr cs:oldHandler+2
-    mov dx, word ptr cs:oldHandler
+    mov dx, word ptr es:oldHandler
+    mov ds, word ptr es:oldHandler + 2
     int 21h
+
+    pop ds
+    pop es
+
+    mov dx, offset unloadMsg
+    mov ah, 09h
+    int 21h
+
+    mov al, autorepeatMode
+    out 60h, al
+
+    call waiter
+
+    mov al, maxSpeed
+    out 60h, al
 
 exit:
 	mov ah, 4ch
 	int 21h
 uninstaller endp
-end main
+
+loadMsg   DB 'Loaded!$'
+unloadMsg DB 'Unloaded!$'
+
+end init
