@@ -22,6 +22,12 @@ myHandler proc
     push es
     push ds
 
+    push cs
+    pop ds
+    
+    pushf
+    call oldHandler
+
     cmp counter, 0
     jne endHandling
     
@@ -48,11 +54,12 @@ speedIsNotMax:
 
 endHandling:
     dec counter
+
     pop ds
     pop es
     popa
 
-    jmp cs:oldHandler
+    iret
 myHandler endp
 
 waiter proc
