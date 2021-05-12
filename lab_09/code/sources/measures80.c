@@ -2,17 +2,17 @@
 
 #include "measures80.h"
 
-void calc_sum80(__float80 a, __float80 b, size_t count)
+void calc_sum80(long double a, long double b, size_t count)
 {
-    __float80 c;
+    long double c;
     for (size_t i = 0; i < count; ++i)
         c = a + b;
 }
 
 #ifdef ASM
-void calc_sum80_asm(__float80 a, __float80 b, size_t count)
+void calc_sum80_asm(long double a, long double b, size_t count)
 {
-    __float80 c;
+    long double c;
 
     for (size_t i = 0; i < count; ++i)
         asm("fld %1\n"
@@ -24,17 +24,17 @@ void calc_sum80_asm(__float80 a, __float80 b, size_t count)
 }
 #endif
 
-void calc_mul80(__float80 a, __float80 b, size_t count)
+void calc_mul80(long double a, long double b, size_t count)
 {
-    __float80 c;
+    long double c;
     for (size_t i = 0; i < count; ++i)
         c = a * b;
 }
 
 #ifdef ASM
-void calc_mul80_asm(__float80 a, __float80 b, size_t count)
+void calc_mul80_asm(long double a, long double b, size_t count)
 {
-    __float80 c;
+    long double c;
 
     for (size_t i = 0; i < count; ++i)
         asm("fld %1\n"
@@ -46,7 +46,7 @@ void calc_mul80_asm(__float80 a, __float80 b, size_t count)
 }
 #endif
 
-static void print_sum80_info(__float80 a, __float80 b)
+static void print_sum80_info(long double a, long double b)
 {
     clock_t begin = clock();
     calc_sum80(a, b, REPEATS);
@@ -63,7 +63,7 @@ static void print_sum80_info(__float80 a, __float80 b)
 #endif
 }
 
-static void print_mul80_info(__float80 a, __float80 b)
+static void print_mul80_info(long double a, long double b)
 {
     clock_t begin = clock();
     calc_mul80(a, b, REPEATS);
@@ -81,9 +81,9 @@ static void print_mul80_info(__float80 a, __float80 b)
 
 void print_measures80()
 {   
-    printf("__FLOAT80 (%zu bits)\n\n", sizeof(__float80) * CHAR_BIT);
+    printf("long double (%zu bits)\n\n", sizeof(long double) * CHAR_BIT);
 
-    __float80 a = 2e43, b = 11e53;
+    long double a = 2e43, b = 11e53;
 
     print_sum80_info(a, b);
     

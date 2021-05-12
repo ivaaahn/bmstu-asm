@@ -301,7 +301,7 @@ print_mul80_info:
 	.size	print_mul80_info, .-print_mul80_info
 	.section	.rodata
 .LC7:
-	.string	"__FLOAT80 (%zu bits)\n\n"
+	.string	"long double (%zu bits)\n\n"
 .LC10:
 	.string	"==================="
 	.text
