@@ -81,7 +81,7 @@ static void print_mul80_info(long double a, long double b)
 
 void print_measures80()
 {   
-    printf("long double (%zu bits)\n\n", sizeof(long double) * CHAR_BIT);
+    printf("long double  (%zu bits)\n\n", sizeof(long double) * CHAR_BIT);
 
     long double a = 2e43, b = 11e53;
 
