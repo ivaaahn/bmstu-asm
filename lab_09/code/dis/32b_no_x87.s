@@ -1,9 +1,9 @@
-	.file	"measures64.c"
+	.file	"measures32.c"
 	.intel_syntax noprefix
 	.text
-	.globl	calc_sum64
-	.type	calc_sum64, @function
-calc_sum64:
+	.globl	calc_sum32
+	.type	calc_sum32, @function
+calc_sum32:
 .LFB0:
 	.cfi_startproc
 	endbr64
@@ -12,19 +12,20 @@ calc_sum64:
 	.cfi_offset 6, -16
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
-	movsd	QWORD PTR -24[rbp], xmm0
-	movsd	QWORD PTR -32[rbp], xmm1
-	mov	QWORD PTR -40[rbp], rdi
-	mov	QWORD PTR -16[rbp], 0
+	movss	DWORD PTR -20[rbp], xmm0
+	movss	DWORD PTR -24[rbp], xmm1
+	mov	QWORD PTR -32[rbp], rdi
+	mov	QWORD PTR -8[rbp], 0
 	jmp	.L2
 .L3:
-	movsd	xmm0, QWORD PTR -24[rbp]
-	addsd	xmm0, QWORD PTR -32[rbp]
-	movsd	QWORD PTR -8[rbp], xmm0
-	add	QWORD PTR -16[rbp], 1
+	movss	xmm0, DWORD PTR -20[rbp]
+	addss	xmm0, DWORD PTR -24[rbp]
+	movss	DWORD PTR -12[rbp], xmm0
+	add	QWORD PTR -8[rbp], 1
 .L2:
-	cmp	QWORD PTR -16[rbp], 999999999
-	jbe	.L3
+	mov	rax, QWORD PTR -8[rbp]
+	cmp	rax, QWORD PTR -32[rbp]
+	jb	.L3
 	nop
 	nop
 	pop	rbp
@@ -32,10 +33,10 @@ calc_sum64:
 	ret
 	.cfi_endproc
 .LFE0:
-	.size	calc_sum64, .-calc_sum64
-	.globl	calc_sum64_asm
-	.type	calc_sum64_asm, @function
-calc_sum64_asm:
+	.size	calc_sum32, .-calc_sum32
+	.globl	calc_sum32_asm
+	.type	calc_sum32_asm, @function
+calc_sum32_asm:
 .LFB1:
 	.cfi_startproc
 	endbr64
@@ -44,10 +45,10 @@ calc_sum64_asm:
 	.cfi_offset 6, -16
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
-	sub	rsp, 64
-	movsd	QWORD PTR -40[rbp], xmm0
-	movsd	QWORD PTR -48[rbp], xmm1
-	mov	QWORD PTR -56[rbp], rdi
+	sub	rsp, 48
+	movss	DWORD PTR -36[rbp], xmm0
+	movss	DWORD PTR -40[rbp], xmm1
+	mov	QWORD PTR -48[rbp], rdi
 	mov	rax, QWORD PTR fs:40
 	mov	QWORD PTR -8[rbp], rax
 	xor	eax, eax
@@ -55,18 +56,18 @@ calc_sum64_asm:
 	jmp	.L5
 .L6:
 #APP
-# 18 "sources/measures64.c" 1
-	fld QWORD PTR -40[rbp]
-fld QWORD PTR -48[rbp]
+# 18 "sources/measures32.c" 1
+	fld DWORD PTR -36[rbp]
+fld DWORD PTR -40[rbp]
 faddp
-fstp QWORD PTR -24[rbp]
+fstp DWORD PTR -20[rbp]
 
 # 0 "" 2
 #NO_APP
 	add	QWORD PTR -16[rbp], 1
 .L5:
 	mov	rax, QWORD PTR -16[rbp]
-	cmp	rax, QWORD PTR -56[rbp]
+	cmp	rax, QWORD PTR -48[rbp]
 	jb	.L6
 	nop
 	mov	rax, QWORD PTR -8[rbp]
@@ -79,10 +80,10 @@ fstp QWORD PTR -24[rbp]
 	ret
 	.cfi_endproc
 .LFE1:
-	.size	calc_sum64_asm, .-calc_sum64_asm
-	.globl	calc_mul64
-	.type	calc_mul64, @function
-calc_mul64:
+	.size	calc_sum32_asm, .-calc_sum32_asm
+	.globl	calc_mul32
+	.type	calc_mul32, @function
+calc_mul32:
 .LFB2:
 	.cfi_startproc
 	endbr64
@@ -91,19 +92,20 @@ calc_mul64:
 	.cfi_offset 6, -16
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
-	movsd	QWORD PTR -24[rbp], xmm0
-	movsd	QWORD PTR -32[rbp], xmm1
-	mov	QWORD PTR -40[rbp], rdi
-	mov	QWORD PTR -16[rbp], 0
+	movss	DWORD PTR -20[rbp], xmm0
+	movss	DWORD PTR -24[rbp], xmm1
+	mov	QWORD PTR -32[rbp], rdi
+	mov	QWORD PTR -8[rbp], 0
 	jmp	.L9
 .L10:
-	movsd	xmm0, QWORD PTR -24[rbp]
-	mulsd	xmm0, QWORD PTR -32[rbp]
-	movsd	QWORD PTR -8[rbp], xmm0
-	add	QWORD PTR -16[rbp], 1
+	movss	xmm0, DWORD PTR -20[rbp]
+	mulss	xmm0, DWORD PTR -24[rbp]
+	movss	DWORD PTR -12[rbp], xmm0
+	add	QWORD PTR -8[rbp], 1
 .L9:
-	cmp	QWORD PTR -16[rbp], 999999999
-	jbe	.L10
+	mov	rax, QWORD PTR -8[rbp]
+	cmp	rax, QWORD PTR -32[rbp]
+	jb	.L10
 	nop
 	nop
 	pop	rbp
@@ -111,10 +113,10 @@ calc_mul64:
 	ret
 	.cfi_endproc
 .LFE2:
-	.size	calc_mul64, .-calc_mul64
-	.globl	calc_mul64_asm
-	.type	calc_mul64_asm, @function
-calc_mul64_asm:
+	.size	calc_mul32, .-calc_mul32
+	.globl	calc_mul32_asm
+	.type	calc_mul32_asm, @function
+calc_mul32_asm:
 .LFB3:
 	.cfi_startproc
 	endbr64
@@ -123,10 +125,10 @@ calc_mul64_asm:
 	.cfi_offset 6, -16
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
-	sub	rsp, 64
-	movsd	QWORD PTR -40[rbp], xmm0
-	movsd	QWORD PTR -48[rbp], xmm1
-	mov	QWORD PTR -56[rbp], rdi
+	sub	rsp, 48
+	movss	DWORD PTR -36[rbp], xmm0
+	movss	DWORD PTR -40[rbp], xmm1
+	mov	QWORD PTR -48[rbp], rdi
 	mov	rax, QWORD PTR fs:40
 	mov	QWORD PTR -8[rbp], rax
 	xor	eax, eax
@@ -134,18 +136,18 @@ calc_mul64_asm:
 	jmp	.L12
 .L13:
 #APP
-# 40 "sources/measures64.c" 1
-	fld QWORD PTR -40[rbp]
-fld QWORD PTR -48[rbp]
+# 40 "sources/measures32.c" 1
+	fld DWORD PTR -36[rbp]
+fld DWORD PTR -40[rbp]
 fmulp
-fstp QWORD PTR -24[rbp]
+fstp DWORD PTR -20[rbp]
 
 # 0 "" 2
 #NO_APP
 	add	QWORD PTR -16[rbp], 1
 .L12:
 	mov	rax, QWORD PTR -16[rbp]
-	cmp	rax, QWORD PTR -56[rbp]
+	cmp	rax, QWORD PTR -48[rbp]
 	jb	.L13
 	nop
 	mov	rax, QWORD PTR -8[rbp]
@@ -158,15 +160,15 @@ fstp QWORD PTR -24[rbp]
 	ret
 	.cfi_endproc
 .LFE3:
-	.size	calc_mul64_asm, .-calc_mul64_asm
+	.size	calc_mul32_asm, .-calc_mul32_asm
 	.section	.rodata
 .LC2:
 	.string	"[+]     %-5.3g ns\n"
 .LC3:
 	.string	"[+] asm %-5.3g ns\n"
 	.text
-	.type	print_sum64_info, @function
-print_sum64_info:
+	.type	print_sum32_info, @function
+print_sum32_info:
 .LFB4:
 	.cfi_startproc
 	endbr64
@@ -176,16 +178,16 @@ print_sum64_info:
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
 	sub	rsp, 32
-	movsd	QWORD PTR -24[rbp], xmm0
-	movsd	QWORD PTR -32[rbp], xmm1
+	movss	DWORD PTR -20[rbp], xmm0
+	movss	DWORD PTR -24[rbp], xmm1
 	call	clock@PLT
 	mov	QWORD PTR -16[rbp], rax
-	movsd	xmm0, QWORD PTR -32[rbp]
-	mov	rax, QWORD PTR -24[rbp]
+	movss	xmm0, DWORD PTR -24[rbp]
+	mov	eax, DWORD PTR -20[rbp]
 	mov	edi, 1000000000
-	movapd	xmm1, xmm0
-	movq	xmm0, rax
-	call	calc_sum64
+	movaps	xmm1, xmm0
+	movd	xmm0, eax
+	call	calc_sum32
 	call	clock@PLT
 	mov	QWORD PTR -8[rbp], rax
 	mov	rax, QWORD PTR -8[rbp]
@@ -200,12 +202,12 @@ print_sum64_info:
 	call	printf@PLT
 	call	clock@PLT
 	mov	QWORD PTR -16[rbp], rax
-	movsd	xmm0, QWORD PTR -32[rbp]
-	mov	rax, QWORD PTR -24[rbp]
+	movss	xmm0, DWORD PTR -24[rbp]
+	mov	eax, DWORD PTR -20[rbp]
 	mov	edi, 1000000000
-	movapd	xmm1, xmm0
-	movq	xmm0, rax
-	call	calc_sum64_asm
+	movaps	xmm1, xmm0
+	movd	xmm0, eax
+	call	calc_sum32_asm
 	call	clock@PLT
 	mov	QWORD PTR -8[rbp], rax
 	mov	rax, QWORD PTR -8[rbp]
@@ -224,15 +226,15 @@ print_sum64_info:
 	ret
 	.cfi_endproc
 .LFE4:
-	.size	print_sum64_info, .-print_sum64_info
+	.size	print_sum32_info, .-print_sum32_info
 	.section	.rodata
 .LC4:
 	.string	"[*]     %-5.3g ns\n"
 .LC5:
 	.string	"[*] asm %-5.3g ns\n"
 	.text
-	.type	print_mul64_info, @function
-print_mul64_info:
+	.type	print_mul32_info, @function
+print_mul32_info:
 .LFB5:
 	.cfi_startproc
 	endbr64
@@ -242,16 +244,16 @@ print_mul64_info:
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
 	sub	rsp, 32
-	movsd	QWORD PTR -24[rbp], xmm0
-	movsd	QWORD PTR -32[rbp], xmm1
+	movss	DWORD PTR -20[rbp], xmm0
+	movss	DWORD PTR -24[rbp], xmm1
 	call	clock@PLT
 	mov	QWORD PTR -16[rbp], rax
-	movsd	xmm0, QWORD PTR -32[rbp]
-	mov	rax, QWORD PTR -24[rbp]
+	movss	xmm0, DWORD PTR -24[rbp]
+	mov	eax, DWORD PTR -20[rbp]
 	mov	edi, 1000000000
-	movapd	xmm1, xmm0
-	movq	xmm0, rax
-	call	calc_mul64
+	movaps	xmm1, xmm0
+	movd	xmm0, eax
+	call	calc_mul32
 	call	clock@PLT
 	mov	QWORD PTR -8[rbp], rax
 	mov	rax, QWORD PTR -8[rbp]
@@ -266,12 +268,12 @@ print_mul64_info:
 	call	printf@PLT
 	call	clock@PLT
 	mov	QWORD PTR -16[rbp], rax
-	movsd	xmm0, QWORD PTR -32[rbp]
-	mov	rax, QWORD PTR -24[rbp]
+	movss	xmm0, DWORD PTR -24[rbp]
+	mov	eax, DWORD PTR -20[rbp]
 	mov	edi, 1000000000
-	movapd	xmm1, xmm0
-	movq	xmm0, rax
-	call	calc_mul64_asm
+	movaps	xmm1, xmm0
+	movd	xmm0, eax
+	call	calc_mul32_asm
 	call	clock@PLT
 	mov	QWORD PTR -8[rbp], rax
 	mov	rax, QWORD PTR -8[rbp]
@@ -290,16 +292,16 @@ print_mul64_info:
 	ret
 	.cfi_endproc
 .LFE5:
-	.size	print_mul64_info, .-print_mul64_info
+	.size	print_mul32_info, .-print_mul32_info
 	.section	.rodata
 .LC6:
-	.string	"DOUBLE (%zu bits)\n\n"
-.LC9:
+	.string	"FLOAT (%zu bits)\n\n"
+.LC8:
 	.string	"==================="
 	.text
-	.globl	print_measures64
-	.type	print_measures64, @function
-print_measures64:
+	.globl	print_measures32
+	.type	print_measures32, @function
+print_measures32:
 .LFB6:
 	.cfi_startproc
 	endbr64
@@ -309,25 +311,25 @@ print_measures64:
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
 	sub	rsp, 16
-	mov	esi, 64
+	mov	esi, 32
 	lea	rdi, .LC6[rip]
 	mov	eax, 0
 	call	printf@PLT
-	movsd	xmm0, QWORD PTR .LC7[rip]
-	movsd	QWORD PTR -16[rbp], xmm0
-	movsd	xmm0, QWORD PTR .LC8[rip]
-	movsd	QWORD PTR -8[rbp], xmm0
-	movsd	xmm0, QWORD PTR -8[rbp]
-	mov	rax, QWORD PTR -16[rbp]
-	movapd	xmm1, xmm0
-	movq	xmm0, rax
-	call	print_sum64_info
-	movsd	xmm0, QWORD PTR -8[rbp]
-	mov	rax, QWORD PTR -16[rbp]
-	movapd	xmm1, xmm0
-	movq	xmm0, rax
-	call	print_mul64_info
-	lea	rdi, .LC9[rip]
+	movss	xmm0, DWORD PTR .LC7[rip]
+	movss	DWORD PTR -8[rbp], xmm0
+	movss	xmm0, DWORD PTR .LC7[rip]
+	movss	DWORD PTR -4[rbp], xmm0
+	movss	xmm0, DWORD PTR -4[rbp]
+	mov	eax, DWORD PTR -8[rbp]
+	movaps	xmm1, xmm0
+	movd	xmm0, eax
+	call	print_sum32_info
+	movss	xmm0, DWORD PTR -4[rbp]
+	mov	eax, DWORD PTR -8[rbp]
+	movaps	xmm1, xmm0
+	movd	xmm0, eax
+	call	print_mul32_info
+	lea	rdi, .LC8[rip]
 	call	puts@PLT
 	nop
 	leave
@@ -335,7 +337,7 @@ print_measures64:
 	ret
 	.cfi_endproc
 .LFE6:
-	.size	print_measures64, .-print_measures64
+	.size	print_measures32, .-print_measures32
 	.section	.rodata
 	.align 8
 .LC0:
@@ -345,14 +347,9 @@ print_measures64:
 .LC1:
 	.long	0
 	.long	1104006501
-	.align 8
+	.align 4
 .LC7:
-	.long	4128819321
-	.long	1223471830
-	.align 8
-.LC8:
-	.long	363886485
-	.long	1260845077
+	.long	2139095040
 	.ident	"GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0"
 	.section	.note.GNU-stack,"",@progbits
 	.section	.note.gnu.property,"a"
