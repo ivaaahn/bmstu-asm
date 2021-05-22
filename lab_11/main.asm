@@ -45,13 +45,7 @@ BTN_EQ = 1004
 WndProc proc hWin :DWORD, uMsg :DWORD, wParam :DWORD, lParam :DWORD
     switch uMsg
         case WM_COMMAND
-            ; We shoud take only low part of wParam
-            mov ebx, wParam
-            xor edx, edx
-            mov dx, bx
-            mov curr_item_id, edx
-
-            .if curr_item_id == BTN_EQ
+            .if wParam == BTN_EQ
                 invoke GetDlgItemInt, hWin, EDT_FST, 0, FALSE
                 .if eax < 0 || eax > 9
                     invoke MessageBox, hWin, chr$("You must enter only digits"), chr$("Error"), 0
